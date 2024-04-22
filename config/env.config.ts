@@ -1,7 +1,7 @@
 import { plainToInstance } from 'class-transformer';
 import { IsBoolean, IsEnum, IsNumber, IsString, Max, Min, validateSync } from 'class-validator';
 
-enum DBTypes {
+export enum DBTypes {
     pg = 'postgres',
     mysql = 'mysql',
 }
