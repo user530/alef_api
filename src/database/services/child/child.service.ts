@@ -20,7 +20,7 @@ export class ChildService implements IChildService {
         if (!parentUser)
             throw new NotFoundException('Пользователь не найден!');
 
-        return this.childRepository.find({ where: { parent: parentUser } });
+        return this.childRepository.find({ where: { parent: { id: userId } } });
     }
 
     getChildById(childId: number): Promise<Child | null> {
@@ -40,18 +40,21 @@ export class ChildService implements IChildService {
         if (parentUser.children.length >= 5)
             throw new BadRequestException('Пользователь уже имеет 5 детей!');
 
-        const newChild = this.childRepository.create(createChildDTO);
-        newChild.parent = parentUser;
+        const newChild = this.childRepository.create(
+            {
+                ...createChildDTO,
+                parent: parentUser,
+            });
 
         return this.childRepository.save(newChild);
     }
 
     async updateChild(childId: number, updateChildDTO: UpdateChildDTO): Promise<Child> {
         // Try to create a new child with the id
-        const updatedChild = await this.childRepository.preload({ id: childId, ...updateChildDTO });
+        const updatedChild = await this.childRepository.preload({ ...updateChildDTO, id: childId });
 
         if (!updatedChild)
-            throw new NotFoundException('Пользователь не найден!');
+            throw new NotFoundException('Ребёнок не найден!');
 
         return this.childRepository.save(updatedChild);
     }
@@ -60,7 +63,7 @@ export class ChildService implements IChildService {
         const result = await this.childRepository.delete(childId);
 
         if (result.affected === 0)
-            throw new NotFoundException('Пользователь не найден!');
+            throw new NotFoundException('Ребёнок не найден!');
 
         return;
     }
