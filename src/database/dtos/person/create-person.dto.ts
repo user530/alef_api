@@ -1,21 +1,21 @@
 import { IsInt, IsNotEmpty, IsString, Max, Min } from 'class-validator';
 
 export class CreatePersonDTO {
-    @IsNotEmpty({ message: 'Укажите имя!' })
-    @IsString({ message: 'Имя должно быть строкой!' })
+    @IsNotEmpty({ message: 'Укажите имя (firstName)!' })
+    @IsString({ message: 'Имя (firstName) должно быть строкой!' })
     firstName: string;
 
-    @IsNotEmpty({ message: 'Укажите фамилию!' })
-    @IsString({ message: 'Фамилия должна быть строкой!' })
+    @IsNotEmpty({ message: 'Укажите фамилию (lastName)!' })
+    @IsString({ message: 'Фамилия (lastName) должна быть строкой!' })
     lastName: string;
 
-    @IsNotEmpty({ message: 'Укажите отчество!' })
-    @IsString({ message: 'Отчество должно быть строкой!' })
+    @IsNotEmpty({ message: 'Укажите отчество (fatherName)!' })
+    @IsString({ message: 'Отчество (fatherName) должно быть строкой!' })
     fatherName: string;
 
-    @IsNotEmpty({ message: 'Укажите возраст!' })
-    @IsInt({ message: 'Возраст должен быть корректной целой цифрой!' })
-    @Min(0, { message: 'Возраст не может быть меньше 0!' })
-    @Max(120, { message: 'Возраст не может быть больше 120!' })
+    @IsNotEmpty({ message: 'Укажите возраст (age)!' })
+    @IsInt({ message: 'Возраст (age) должен быть корректной целой цифрой!' })
+    @Min(0, { message: 'Возраст (age) не может быть меньше 0!' })
+    @Max(120, { message: 'Возраст (age) не может быть больше 120!' })
     age: number;
 }
