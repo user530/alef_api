@@ -1,5 +1,5 @@
 import { plainToInstance } from 'class-transformer';
-import { IsBoolean, IsEnum, IsNumber, IsString, Max, Min, validateSync } from 'class-validator';
+import { IsBooleanString, IsEnum, IsNumber, IsString, Max, Min, validateSync } from 'class-validator';
 
 export enum DBTypes {
     pg = 'postgres',
@@ -27,8 +27,8 @@ class EnvironmentVariables {
     @IsString()
     DB_NAME: string;
 
-    @IsBoolean()
-    DB_SYNC: boolean;
+    @IsBooleanString()
+    DB_SYNC: string;
 
     @IsNumber()
     @Min(0)

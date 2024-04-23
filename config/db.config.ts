@@ -1,6 +1,8 @@
 import { registerAs } from '@nestjs/config';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { DBTypes } from './env.config';
+import { Child, User } from 'src/database/entities';
+import { SchemaInitialization, DataInitialization } from 'src/migrations';
 
 export default registerAs('database', (): TypeOrmModuleOptions => {
     return {
@@ -11,8 +13,14 @@ export default registerAs('database', (): TypeOrmModuleOptions => {
         password: process.env.DB_PASS,
         database: process.env.DB_NAME,
         synchronize: process.env.DB_SYNC === 'true',
-        entities: [],
-        // migrations: [],
-        // migrationsRun: true,
+        entities: [
+            User,
+            Child,
+        ],
+        migrations: [
+            SchemaInitialization,
+            DataInitialization,
+        ],
+        migrationsRun: true,
     }
 })
