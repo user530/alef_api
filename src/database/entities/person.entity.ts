@@ -1,24 +1,24 @@
-import { Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 export abstract class Person {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({ name: 'first_name' })
     firstName: string;
 
-    @Column()
+    @Column({ name: 'last_name' })
     lastName: string;
 
-    @Column()
+    @Column({ name: 'father_name' })
     fatherName: string;
 
     @Column()
     age: number;
 
-    @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+    @CreateDateColumn({ name: 'created_at' })
     createdAt: Date;
 
-    @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+    @UpdateDateColumn({ name: 'updated_at', onUpdate: 'CURRENT_TIMESTAMP' })
     updatedAt: Date;
 }
