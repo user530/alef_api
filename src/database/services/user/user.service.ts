@@ -28,7 +28,7 @@ export class UserService implements IUserService {
 
     async updateUser(userId: number, updateUserDto: UpdateUserDTO): Promise<User> {
         // Try to create a new user with the id
-        const userToUpdate = await this.userRepository.preload({ id: userId, ...updateUserDto });
+        const userToUpdate = await this.userRepository.preload({ ...updateUserDto, id: userId });
 
         if (!userToUpdate)
             throw new NotFoundException('Пользователь не найден!');
