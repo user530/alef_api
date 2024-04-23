@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { validate } from 'config/env.config';
 import dbConfig from 'config/db.config';
 import { TypeOrmModule, TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
+import { DatabaseModule } from 'src/database/database.module';
+import { UserController, ChildController } from 'src/app/controllers';
 
 @Module({
   imports: [
@@ -17,9 +17,12 @@ import { TypeOrmModule, TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => configService.get<TypeOrmModuleAsyncOptions>('database'),
-    })
+    }),
+    DatabaseModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [
+    UserController,
+    ChildController,
+  ],
 })
 export class AppModule { }

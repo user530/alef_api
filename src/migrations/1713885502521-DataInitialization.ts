@@ -48,8 +48,8 @@ export class DataInitialization1713885502521 implements MigrationInterface {
         // Execute the query
         await queryRunner.query(usersInsertQuery);
 
+        // Get inserted users data to get relation IDs
         const inserted = await queryRunner.manager.find('api_user');
-        console.log(inserted);
 
         // Placeholder data for children
         const children = [
