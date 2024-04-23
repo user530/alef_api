@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateChildDTO, UpdateChildDTO } from 'src/database/dtos/child';
 import { Child, User } from 'src/database/entities';
@@ -28,10 +28,17 @@ export class ChildService implements IChildService {
     }
 
     async addChildToUser(userId: number, createChildDTO: CreateChildDTO): Promise<Child> {
-        const parentUser = await this.userRepository.findOneBy({ id: userId });
+        const parentUser = await this.userRepository.findOne(
+            {
+                where: { id: userId },
+                relations: ['children'],
+            });
 
         if (!parentUser)
             throw new NotFoundException('Пользователь не найден!');
+
+        if (parentUser.children.length >= 5)
+            throw new BadRequestException('Пользователь уже имеет 5 детей!');
 
         const newChild = this.childRepository.create(createChildDTO);
         newChild.parent = parentUser;
