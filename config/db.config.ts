@@ -1,7 +1,7 @@
 import { registerAs } from '@nestjs/config';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { DBTypes } from './env.config';
-import { Child, User } from 'src/database/entities';
+import { Child, User } from 'src/family/entities';
 import { SchemaInitialization, DataInitialization } from 'src/migrations';
 
 export default registerAs('database', (): TypeOrmModuleOptions => {

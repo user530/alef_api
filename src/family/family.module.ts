@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User, Child } from './entities';
-import { UserService } from './services/user/user.service';
-import { ChildService } from './services/child/child.service';
+import { Child, User } from './entities';
+import { ChildController, UserController } from './controllers';
+import { ChildService, UserService } from './services';
 
 @Module({
     imports: [
@@ -13,13 +13,13 @@ import { ChildService } from './services/child/child.service';
             ]
         ),
     ],
-    providers: [
-        UserService,
-        ChildService
+    controllers: [
+        UserController,
+        ChildController,
     ],
-    exports: [
+    providers: [
         UserService,
         ChildService,
     ]
 })
-export class DatabaseModule { }
+export class FamilyModule { }
