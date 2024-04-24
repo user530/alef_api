@@ -1,0 +1,45 @@
+version: '3.5'
+services:
+  database:
+    image: 'postgres:12.7-alpine'
+
+    restart: always
+
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+      - POSTGRES_DB=${DB_NAME}
+
+    ports:
+      - "5432:5432"
+
+    networks:
+      - alef-api
+
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d ${DB_NAME} -U ${DB_USER}" ]
+      interval: 10s
+      timeout: 10s
+      retries: 6
+      start_period: 10s
+
+  api:
+    build:
+      context: .
+
+    depends_on:
+      database:
+        condition: service_healthy
+        restart: true
+
+    env_file:
+      - .env
+
+    ports:
+      - "5000:5000"
+
+    networks:
+      - alef-api
+
+networks:
+  alef-api:
