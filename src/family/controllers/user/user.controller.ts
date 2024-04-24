@@ -1,10 +1,12 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { CustomParseIntPipe } from 'src/common/pipes';
+import { AuthenticatedUserGuard, AuthorizedUserGuard } from 'src/common/guards';
 import { CreateUserDTO, UpdateUserDTO } from '../../dtos';
 import { User } from '../../entities';
 import { UserService } from '../../services';
 
 @Controller('api/v1/users')
+@UseGuards(AuthenticatedUserGuard)
 export class UserController {
     constructor(
         private readonly userService: UserService,
@@ -17,6 +19,7 @@ export class UserController {
     }
 
     @Get(':userId')
+    @UseGuards(AuthorizedUserGuard)
     @HttpCode(HttpStatus.OK)
     getUserById(
         @Param('userId', CustomParseIntPipe) userId: number,
@@ -33,6 +36,7 @@ export class UserController {
     }
 
     @Patch(':userId')
+    @UseGuards(AuthorizedUserGuard)
     @HttpCode(HttpStatus.OK)
     updateUser(
         @Param('userId', CustomParseIntPipe) userId: number,
@@ -42,6 +46,7 @@ export class UserController {
     }
 
     @Delete(':userId')
+    @UseGuards(AuthorizedUserGuard)
     @HttpCode(HttpStatus.NO_CONTENT)
     deleteUser(
         @Param('userId', CustomParseIntPipe) userId: number,

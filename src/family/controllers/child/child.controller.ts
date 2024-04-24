@@ -1,10 +1,12 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post } from '@nestjs/common';
-import { CustomParseIntPipe } from 'src/common/pipes/custom-parse-int/custom-parse-int.pipe';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { CustomParseIntPipe } from 'src/common/pipes';
+import { AuthenticatedUserGuard, AuthorizedUserGuard } from 'src/common/guards';
 import { CreateChildDTO, UpdateChildDTO } from '../../dtos';
 import { Child } from '../../entities';
 import { ChildService } from '../../services';
 
 @Controller('api/v1/users/:userId/children')
+@UseGuards(AuthenticatedUserGuard, AuthorizedUserGuard)
 export class ChildController {
     constructor(
         private readonly childService: ChildService,
