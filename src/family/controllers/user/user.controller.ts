@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, UseGuards } from '@nestjs/common';
-import { CustomParseIntPipe } from 'src/common/pipes';
-import { AuthenticatedUserGuard, AuthorizedUserGuard } from 'src/common/guards';
+import { CustomParseIntPipe } from '../../../common/pipes';
+import { AuthenticatedUserGuard, AuthorizedUserGuard } from '../../../common/guards';
 import { CreateUserDTO, UpdateUserDTO } from '../../dtos';
 import { User } from '../../entities';
 import { UserService } from '../../services';
