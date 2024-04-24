@@ -1,0 +1,1 @@
+export { CustomParseIntPipe } from './custom-parse-int/custom-parse-int.pipe';
