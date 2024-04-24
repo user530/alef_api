@@ -23,7 +23,7 @@ export class UserController {
     @HttpCode(HttpStatus.OK)
     getUserById(
         @Param('userId', CustomParseIntPipe) userId: number,
-    ): Promise<User | null> {
+    ): Promise<User> {
         return this.userService.getUserById(userId);
     }
 

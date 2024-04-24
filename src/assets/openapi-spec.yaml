@@ -1,0 +1,459 @@
+openapi: 3.0.0
+info:
+  title: Family API
+  description: Семейный API позволяющий осуществлять CRUD опреации с данными пользователей и их детей.
+  version: 1.0.0
+
+tags:
+  - name: Пользователи
+    description: Операции свзяанные с данными самих пользователей.
+
+  - name: Дети
+    description: Операции сязанные с детьми выбранного пользователя.
+
+paths:
+  /users:
+    get:
+      summary: Выводит информацию о всех пользователях.
+      operationId: getAllUsers
+      tags:
+        - Пользователи
+      responses:
+        '200':
+          description: Объект содержащий лист всех зарегистрированных пользователей.
+          content:
+            application/json:
+              schema:
+                 allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/User'
+
+    post:
+      summary: Добавляет информацию о новом пользователе в базу.
+      operationId: addUser
+      tags:
+        - Пользователи
+      requestBody:
+        description: Данные пользователя на основе которых создаётся новая запись.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePersonDTO'
+      responses:
+        '201':
+          description: Объект содержащий данные нового пользователя.
+          content:
+            application/json:
+                schema:
+                  allOf:
+                    - $ref: '#/components/schemas/SuccessResponse'
+                    - properties:
+                        data:
+                          $ref: '#/components/schemas/User'
+
+  /users/{userId}:
+    get:
+      summary: Выводит информацию об отдельно взятом пользователе.
+      operationId: getUserById
+      tags:
+        - Пользователи
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: integer
+          description: Уникальный идентификатор пользователя.
+      responses:
+        '200':
+          description: Объект содержащий данные запрашиваемого пользователя.
+          content:
+            application/json:
+                schema:
+                  allOf:
+                    - $ref: '#/components/schemas/SuccessResponse'
+                    - properties:
+                        data:
+                          $ref: '#/components/schemas/User'
+    
+    patch:
+      summary: Изменяет информацию об отдельно взятом пользователе.
+      operationId: updateUser
+      tags:
+        - Пользователи
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: integer
+          description: Уникальный идентификатор пользователя для изменения.
+      requestBody:
+        description: Данные пользователя на основе которых изменяется выбранная запись.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePersonDTO'
+      responses:
+        '200':
+          description: Объект содержащий измённые данные пользователя.
+          content:
+            application/json:
+                schema:
+                  allOf:
+                    - $ref: '#/components/schemas/SuccessResponse'
+                    - properties:
+                        data:
+                          $ref: '#/components/schemas/User'
+
+    delete:
+      summary: Удаляет информацию об отдельно взятом пользователе.
+      operationId: deleteUser
+      tags:
+        - Пользователи
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: integer
+          description: Уникальный идентификатор пользователя для удаления.
+      responses:
+        '204':
+          description: Объект подтверждающий операцию удаления.
+          content:
+            application/json:
+                schema:
+                  allOf:
+                    - $ref: '#/components/schemas/SuccessResponse'
+                    - properties:
+                        data:
+                          type: null
+  
+  /users/{userId}/children:
+    get:
+      summary: Выводит информацию о всех детях выбранного пользователя.
+      tags:
+        - Дети
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: integer
+          description: Уникальный идентификатор пользователя для получения информации о детях.
+      responses:
+        '200':
+          description: Объект содержащий лист всех детей выбранного пользователя.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Child'
+
+    post:
+      summary: Добавляет информацию о новом ребёнке выбранного родителя в базу.
+      tags:
+        - Дети
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: integer
+          description: Уникальный идентификатор пользователя для добавления информации о ребёнке.
+      requestBody:
+        description: Данные ребёнка на основе которых создаётся новая запись.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePersonDTO'
+      responses:
+        '201':
+          description: Объект содержащий данные новой записи о ребёнке.
+          content:
+            application/json:
+                schema:
+                  allOf:
+                    - $ref: '#/components/schemas/SuccessResponse'
+                    - properties:
+                        data:
+                          $ref: '#/components/schemas/Child'
+
+  /users/{userId}/children/{childId}:
+    get:
+      summary: Выводит информацию об отдельно взятом ребёнке выбранного родителя.
+      tags:
+        - Дети
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: integer
+          description: Уникальный идентификатор родителя.
+        - in: path
+          name: childId
+          required: true
+          schema:
+            type: integer
+          description: Уникальный идентификатор ребёнка.
+      responses:
+        '200':
+          description: Объект содержащий данные о выбранном ребёнке запрашиваемого родителя. 
+          content:
+            application/json:
+                schema:
+                  allOf:
+                    - $ref: '#/components/schemas/SuccessResponse'
+                    - properties:
+                        data:
+                          $ref: '#/components/schemas/Child'
+                          
+    patch:
+      summary: Изменяет информацию об отдельно взятом пользователе.
+      tags:
+        - Дети
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: integer
+          description: Уникальный идентификатор родителя для изменения данных о ребёнке.
+        - in: path
+          name: childId
+          required: true
+          schema:
+            type: integer
+          description: Уникальный идентификатор ребёнка для изменения данных.
+      requestBody:
+        description: Данные ребёнка на основе которых изменяется выбранная запись.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePersonDTO'
+      responses:
+        '200':
+          description: Объект содержащий обновлённые данные о выбранном ребёнке запрашиваемого родителя.
+          content:
+            application/json:
+                schema:
+                  allOf:
+                    - $ref: '#/components/schemas/SuccessResponse'
+                    - properties:
+                        data:
+                          $ref: '#/components/schemas/Child'
+
+    delete:
+      summary: Удаляет информацию об отдельно взятом ребёнке выбранного родителя.
+      tags:
+        - Дети
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: integer
+          description: Уникальный идентификатор родителя для удаления данных о ребёнке.
+        - in: path
+          name: childId
+          required: true
+          schema:
+            type: integer
+          description: Уникальный идентификатор ребёнка для удаления данных.
+      responses:
+        '204':
+          description: Объект подтверждающий операцию удаления.
+          content:
+            application/json:
+                schema:
+                  allOf:
+                    - $ref: '#/components/schemas/SuccessResponse'
+                    - properties:
+                        data:
+                          type: null
+
+  
+components:
+  schemas:
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+          description: Статуса результата запроса.
+        status:
+          type: integer
+          example: 200
+          description: Код статуса успешного запроса.
+        data:
+          type: object
+          example: '{...}'
+          description: Данные полученные с успешным запросом. Формат объекта варьируется.
+    
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+          description: Статус проваленного запроса.
+        status:
+          type: integer
+          example: 400
+          description: Код ошибки проваленного запроса.
+        data:
+          type: object
+          example: '{ example: { message: "Что-то пошло не так!", code: 500 }'
+          description: Данные полученные с успешным запросом. Формат объекта варьируется.
+
+    User:
+      type: object
+      required:
+        - id
+        - firstName
+        - lastName
+        - fatherName
+        - age
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 7
+          description: Уникальный идентификатор пользователя.
+        firstName:
+          type: string
+          example: Василий
+          description: Имя пользователя.
+        lastName:
+          type: string
+          example: Пупкин
+          description: Фамилия пользователя.
+        fatherName:
+          type: string
+          example: Иванович
+          description: Отчество пользователя.
+        age:
+          type: integer
+          format: int32
+          example: 33
+          minimum: 0
+          maximum: 120
+          description: Возраст пользователя. Не может быть меньше 0 или больше 120.
+        createdAt:
+          type: string
+          format: date-time
+          description: Дата создания записи в базе.
+        updatedAt:
+          type: string
+          format: date-time
+          description: Дата обновления записи в базе.
+
+    Child:
+      type: object
+      required:
+        - id
+        - firstName
+        - lastName
+        - fatherName
+        - age
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 99
+          description: Уникальный идентификатор ребёнка.
+        firstName:
+          type: string
+          example: Василиса
+          description: Имя ребёнка.
+        lastName:
+          type: string
+          example: Пупкина
+          description: Фамилия ребёнка.
+        fatherName:
+          type: string
+          example: Васильевна
+          description: Отчество ребёнка.
+        age:
+          type: integer
+          format: int32
+          example: 13
+          minimum: 0
+          maximum: 120
+          description: Возраст ребёнка. Не может быть меньше 0 или больше 120. Не может быть равен или превышать возраст родителя.
+        createdAt:
+          type: string
+          format: date-time
+          description: Дата создания записи в базе.
+        updatedAt:
+          type: string
+          format: date-time
+          description: Дата обновления записи в базе.
+
+    CreatePersonDTO:
+      type: object
+      required:
+        - firstName
+        - lastName
+        - fatherName
+        - age
+      properties:
+        firstName:
+          type: string
+          description: Имя нового пользователя. Поле не должно быть пустым.
+          example: 'Василий'
+        lastName:
+          type: string
+          description: Фамилия нового пользователя. Поле не должно быть пустым.
+          example: 'Пупкин'
+        fatherName:
+          type: string
+          description: Отчество нового пользователя. Поле не должно быть пустым.
+          example: 'Иванович'
+        age:
+          type: integer
+          format: int32
+          description: Возраст нового пользователя. Поле должно быть целым числом больше 0 и меньше 120.
+          minimum: 0
+          maximum: 120
+          example: 35
+
+    UpdatePersonDTO:
+      type: object
+      properties:
+        firstName:
+          type: string
+          description: Имя нового пользователя. Опциональное поле.
+          example: 'Jane'
+        lastName:
+          type: string
+          description: Фамилия нового пользователя. Опциональное поле.
+          example: 'Doe'
+        fatherName:
+          type: string
+          description: Отчество нового пользователя. Опциональное поле.
+          example: 'Robert'
+        age:
+          type: integer
+          format: int32
+          description: Возраст нового пользователя. Поле должно быть целым числом больше 0 и меньше 120. Опциональное поле.
+          minimum: 0
+          maximum: 120
+          example: 40
+

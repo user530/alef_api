@@ -34,7 +34,7 @@ export class ChildController {
     getChildById(
         @Param('userId', CustomParseIntPipe) userId: number,
         @Param('childId', CustomParseIntPipe) childId: number,
-    ): Promise<Child | null> {
+    ): Promise<Child> {
         return this.childService.getChildById(userId, childId);
     }
 
