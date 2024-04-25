@@ -4,6 +4,10 @@ info:
   description: Семейный API позволяющий осуществлять CRUD опреации с данными пользователей и их детей.
   version: 1.0.0
 
+servers:
+  - url: http://app6.m.timarsuev.fvds.ru/api/v1
+    description: Точка входа в API
+
 tags:
   - name: Пользователи
     description: Операции свзяанные с данными самих пользователей.
@@ -283,7 +287,6 @@ paths:
                         data:
                           type: null
 
-  
 components:
   schemas:
     SuccessResponse:

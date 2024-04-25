@@ -13,6 +13,9 @@ RUN npm run build
 
 ENV NODE_ENV production
 
+# Clean install after build
+RUN npm ci --omit=dev && npm cache clean --force
+
 # Production stage
 FROM node:current-alpine3.19
 
